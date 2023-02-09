@@ -79,6 +79,7 @@ void llfeatures(list<shipmentData> shiplist)
 	int subchoice;
 	cin >> subchoice;
 	list<shipmentData>::iterator it;
+	shipmentData ship;
 	switch (subchoice)
 	{
 	case 1:
@@ -111,9 +112,11 @@ void llfeatures(list<shipmentData> shiplist)
 		}
 		break;
 	case 5:
+		cout<< "Deleted first element" << endl;
 		shiplist.pop_front();
 		break;
 	case 6:
+		cout<< "Deleted last element" << endl;
 		shiplist.pop_back();
 		break;
 	case 7:
@@ -123,10 +126,40 @@ void llfeatures(list<shipmentData> shiplist)
 		it = shiplist.begin();
 		advance(it, pos);
 		shiplist.erase(it);
+		cout << "Deleted element at position " << pos << endl;
 		break;
 	case 8:
 		cout << "Enter position to insert: ";
 		int pos2;
+		cin >> pos2;
+		it = shiplist.begin();
+		advance(it, pos2);
+		cout << "Enter ID: ";
+		cin >> ship.id;
+		cout << "Enter Block: ";
+		cin >> ship.warehouse_block;
+		cout << "Enter Mode: ";
+		cin >> ship.mode_of_shipment;
+		cout << "Enter CC Calls: ";
+		cin >> ship.customer_care_calls;
+		cout << "Enter C Rating: ";
+		cin >> ship.customer_rating;
+		cout << "Enter CoP: ";
+		cin >> ship.cost_of_the_product;
+		cout << "Enter Prior Purchases: ";
+		cin >> ship.prior_purchases;
+		cout << "Enter Importance: ";
+		cin >> ship.product_importance;
+		cout << "Enter Gender: ";
+		cin >> ship.gender;
+		cout << "Enter Discount: ";
+		cin >> ship.discount_offered;
+		cout << "Enter Weight: ";
+		cin >> ship.weight_in_gms;
+		cout << "Enter On Time: ";
+		cin >> ship.reached_on_time;
+		shiplist.insert(it, ship);
+		cout << "Inserted element at position " << pos2 << endl;
 		break;
 	default:
 		break;
@@ -144,6 +177,10 @@ void menu(list<shipmentData> shiplist)
 
 	int choice;
 	cin >> choice;
+
+	//FIXME: If choice is not an integer, the program will loop infinitely
+
+	//TODO: Add vecfeatures(), setfeatures(), and mapfeatures() functions
 	switch (choice)
 	{
 	case 1:
@@ -248,11 +285,21 @@ void load(string fname, list<shipmentData> &data)
 
 int main()
 {
-
+	bool inApp = true;
 	list<shipmentData> shiplist;
 	load("shipping-data-small.csv", shiplist);
 
-	menu(shiplist);
+	while(inApp){
+
+		menu(shiplist);
+		cout << "Would you like to continue? (y/n)" << endl;
+		char choice;
+		cin >> choice;
+		if(choice == 'n'){
+			inApp = false;
+		}
+	}
+	
 
 	/* display(*shiplist.begin()); */
 
