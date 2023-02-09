@@ -9,8 +9,8 @@
 
 using namespace std;
 
-
-struct shipmentData{
+struct shipmentData
+{
 	int id;
 	char warehouse_block;
 	string mode_of_shipment;
@@ -27,42 +27,43 @@ struct shipmentData{
 
 void display(const shipmentData &ship)
 {
-    cout <<left
-    << setw(15)<< ship.id
-	<< setw(15)<< ship.warehouse_block
-	<< setw(15)<< ship.mode_of_shipment
-	<< setw(15)<< ship.customer_care_calls
-	<< setw(15)<< ship.customer_rating
-	<< setw(15)<< ship.cost_of_the_product
-	<< setw(15)<< ship.prior_purchases
-	<< setw(15)<< ship.product_importance
-	<< setw(15)<< ship.gender
-	<< setw(15)<< ship.discount_offered
-	<< setw(15)<< ship.weight_in_gms
-	<< setw(15)<< ship.reached_on_time
+	cout << left
+		 << setw(15) << ship.id
+		 << setw(15) << ship.warehouse_block
+		 << setw(15) << ship.mode_of_shipment
+		 << setw(15) << ship.customer_care_calls
+		 << setw(15) << ship.customer_rating
+		 << setw(15) << ship.cost_of_the_product
+		 << setw(15) << ship.prior_purchases
+		 << setw(15) << ship.product_importance
+		 << setw(15) << ship.gender
+		 << setw(15) << ship.discount_offered
+		 << setw(15) << ship.weight_in_gms
+		 << setw(15) << ship.reached_on_time
 
-    <<endl;
-
+		 << endl;
 }
 
-void showHeaders(){
-	cout <<left
-    << setw(15)<< "ID"
-	<< setw(15)<< "Block"
-	<< setw(15)<< "Mode"
-	<< setw(15)<< "CC Calls"
-	<< setw(15)<< "C Rating"
-	<< setw(15)<< "CoP"
-	<< setw(15)<< "Prior Purchases"
-	<< setw(15)<< "Importance"
-	<< setw(15)<< "Gender"
-	<< setw(15)<< "Discount"
-	<< setw(15)<< "Weight"
-	<< setw(15)<< "On Time"
-    <<endl;
+void showHeaders()
+{
+	cout << left
+		 << setw(15) << "ID"
+		 << setw(15) << "Block"
+		 << setw(15) << "Mode"
+		 << setw(15) << "CC Calls"
+		 << setw(15) << "C Rating"
+		 << setw(15) << "CoP"
+		 << setw(15) << "Prior Purchases"
+		 << setw(15) << "Importance"
+		 << setw(15) << "Gender"
+		 << setw(15) << "Discount"
+		 << setw(15) << "Weight"
+		 << setw(15) << "On Time"
+		 << endl;
 }
 
-void llfeatures(list<shipmentData> shiplist){
+void llfeatures(list<shipmentData> shiplist)
+{
 	cout << "Linked List Features" << endl;
 	cout << "1. Display Linked-List Elements" << endl;
 	cout << "2. Display Front Element" << endl;
@@ -77,7 +78,7 @@ void llfeatures(list<shipmentData> shiplist){
 
 	int subchoice;
 	cin >> subchoice;
-list<shipmentData>::iterator it ;
+	list<shipmentData>::iterator it;
 	switch (subchoice)
 	{
 	case 1:
@@ -99,7 +100,7 @@ list<shipmentData>::iterator it ;
 		cout << "Enter ID to search for: ";
 		int id;
 		cin >> id;
-		for (it= shiplist.begin(); it != shiplist.end(); it++)
+		for (it = shiplist.begin(); it != shiplist.end(); it++)
 		{
 			if (it->id == id)
 			{
@@ -119,7 +120,7 @@ list<shipmentData>::iterator it ;
 		cout << "Enter position to delete: ";
 		int pos;
 		cin >> pos;
-		 it = shiplist.begin();
+		it = shiplist.begin();
 		advance(it, pos);
 		shiplist.erase(it);
 		break;
@@ -130,7 +131,6 @@ list<shipmentData>::iterator it ;
 	default:
 		break;
 	}
-
 }
 
 void menu(list<shipmentData> shiplist)
@@ -165,88 +165,85 @@ void menu(list<shipmentData> shiplist)
 		cout << "Invalid choice" << endl;
 		break;
 	}
-
 }
 
-
 void parseLine(string line, shipmentData &sd)
-{	string temp;
+{
+	string temp;
 
-    try {
-        stringstream ss(line);
+	try
+	{
+		stringstream ss(line);
 
-        
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.id = stoi(temp);
-        getline(ss, temp, ',');
-        //Stores first character of temp field
-        sd.warehouse_block = temp[0];
-        getline(ss, sd.mode_of_shipment, ',');
+		sd.id = stoi(temp);
+		getline(ss, temp, ',');
+		// Stores first character of temp field
+		sd.warehouse_block = temp[0];
+		getline(ss, sd.mode_of_shipment, ',');
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.customer_care_calls = stoi(temp);
+		sd.customer_care_calls = stoi(temp);
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.customer_rating = stoi(temp);
+		sd.customer_rating = stoi(temp);
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.cost_of_the_product = stoi(temp);
+		sd.cost_of_the_product = stoi(temp);
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.prior_purchases = stoi(temp);
-        getline(ss, sd.product_importance, ',');
+		sd.prior_purchases = stoi(temp);
+		getline(ss, sd.product_importance, ',');
 
-        getline(ss, temp, ',');
-        //Stores first character of temp field
-        sd.gender = temp[0];
+		getline(ss, temp, ',');
+		// Stores first character of temp field
+		sd.gender = temp[0];
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.discount_offered = stoi(temp);
+		sd.discount_offered = stoi(temp);
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.weight_in_gms = stoi(temp);
+		sd.weight_in_gms = stoi(temp);
 
-        getline(ss, temp, ',');
+		getline(ss, temp, ',');
 
-        sd.reached_on_time = stoi(temp);
-
-    }
-    catch(std::invalid_argument const& e)
-    {
-        cout <<"Error" <<endl;
-        cout << e.what() <<endl;
-		cout << temp <<endl;
-
-    }
+		sd.reached_on_time = stoi(temp);
+	}
+	catch (std::invalid_argument const &e)
+	{
+		cout << "Error" << endl;
+		cout << e.what() << endl;
+		cout << temp << endl;
+	}
 }
 
 void load(string fname, list<shipmentData> &data)
 {
-    ifstream fin(fname);
+	ifstream fin(fname);
 
-    if(fin)
-    {
-        string line;
+	if (fin)
+	{
+		string line;
 		getline(fin, line);
-        while(getline(fin, line))
-        {
-            shipmentData ship;
-            parseLine(line, ship);
-            data.push_back(ship);
-        }
-        fin.close();
-    }
-    else
-    {
-        cout << "Error opening file." <<endl;
-    }
+		while (getline(fin, line))
+		{
+			shipmentData ship;
+			parseLine(line, ship);
+			data.push_back(ship);
+		}
+		fin.close();
+	}
+	else
+	{
+		cout << "Error opening file." << endl;
+	}
 }
 
 int main()
@@ -256,12 +253,8 @@ int main()
 	load("shipping-data-small.csv", shiplist);
 
 	menu(shiplist);
-	
+
 	/* display(*shiplist.begin()); */
-
-
-	
-	
 
 	return 0;
 }
