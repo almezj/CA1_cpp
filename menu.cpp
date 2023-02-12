@@ -15,6 +15,7 @@ using namespace std;
 This program was made with these assumptions:
 	1. The input file is in the same directory as "menu.cpp" file.
 	2. The input file is NOT empty.
+	3. Program is compiled using C++11 or higher.
 */
 
 struct shipmentData
