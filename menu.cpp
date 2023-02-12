@@ -6,8 +6,16 @@
 #include <vector>
 #include <algorithm>
 #include <list>
+#include <unordered_set>
+#include <unordered_map>
 
 using namespace std;
+
+/*
+This program was made with these assumptions:
+	1. The input file is in the same directory as "menu.cpp" file.
+	2. The input file is NOT empty.
+*/
 
 struct shipmentData
 {
@@ -62,7 +70,58 @@ void showHeaders()
 		 << endl;
 }
 
-void llfeatures(list<shipmentData> shiplist)
+void checkForInvalidProductImportanceValues(list<shipmentData> &shiplist, unordered_set<string> &importanceSet)
+{
+	list<shipmentData>::iterator it;
+	cout<<"Products with invalid importance values: "<<endl;
+	for (it = shiplist.begin(); it != shiplist.end(); it++)
+	{
+		if (importanceSet.find(it->product_importance) == importanceSet.end())
+		{
+			cout << it->id << " " << it->product_importance << endl;
+		}
+	}
+}
+
+bool sortCost(const shipmentData &a, const shipmentData &b)
+{
+	return a.cost_of_the_product < b.cost_of_the_product;
+}
+
+bool sortID(const shipmentData &a, const shipmentData &b)
+{
+	return a.id < b.id;
+}
+
+shipmentData newShipment(shipmentData &ship){
+	cout << "Enter ID: ";
+	cin >> ship.id;
+	cout << "Enter Block: ";
+	cin >> ship.warehouse_block;
+	cout << "Enter Mode: ";
+	cin >> ship.mode_of_shipment;
+	cout << "Enter CC Calls: ";
+	cin >> ship.customer_care_calls;
+	cout << "Enter C Rating: ";
+	cin >> ship.customer_rating;
+	cout << "Enter CoP: ";
+	cin >> ship.cost_of_the_product;
+	cout << "Enter Prior Purchases: ";
+	cin >> ship.prior_purchases;
+	cout << "Enter Importance: ";
+	cin >> ship.product_importance;
+	cout << "Enter Gender";
+	cin >> ship.gender;
+	cout << "Enter Discount";
+	cin >> ship.discount_offered;
+	cout << "Enter Weight";
+	cin >> ship.weight_in_gms;
+	cout << "Reached on time? (1/0)";
+	cin >> ship.reached_on_time;
+	return ship;
+}
+
+void llFeatures(list<shipmentData> &shiplist)
 {
 	cout << "Linked List Features" << endl;
 	cout << "1. Display Linked-List Elements" << endl;
@@ -80,8 +139,13 @@ void llfeatures(list<shipmentData> shiplist)
 	cin >> subchoice;
 	list<shipmentData>::iterator it;
 	shipmentData ship;
+
 	switch (subchoice)
 	{
+		if(cin.fail() || subchoice < 0 || subchoice > 9){
+			cin.clear();
+			cout<<"Invalid input. Please enter a valid option."<<endl;
+		}
 	case 1:
 		showHeaders();
 		for (it = shiplist.begin(); it != shiplist.end(); it++)
@@ -109,6 +173,7 @@ void llfeatures(list<shipmentData> shiplist)
 				display(*it);
 				break;
 			}
+			cout << "ID not found" << endl;
 		}
 		break;
 	case 5:
@@ -124,40 +189,25 @@ void llfeatures(list<shipmentData> shiplist)
 		int pos;
 		cin >> pos;
 		it = shiplist.begin();
-		advance(it, pos);
-		shiplist.erase(it);
-		cout << "Deleted element at position " << pos << endl;
+		advance(it, pos-1);
+		if(it != shiplist.end()){
+			shiplist.erase(it);
+			cout << "Deleted element at position " << pos << endl;
+		} else {
+			cout << "Invalid position" << endl;
+		}
 		break;
 	case 8:
 		cout << "Enter position to insert: ";
 		int pos2;
 		cin >> pos2;
 		it = shiplist.begin();
+		if(pos2 > shiplist.size() || pos2 < 0){
+			cout << "Invalid position" << endl;
+			break;
+		}
 		advance(it, pos2);
-		cout << "Enter ID: ";
-		cin >> ship.id;
-		cout << "Enter Block: ";
-		cin >> ship.warehouse_block;
-		cout << "Enter Mode: ";
-		cin >> ship.mode_of_shipment;
-		cout << "Enter CC Calls: ";
-		cin >> ship.customer_care_calls;
-		cout << "Enter C Rating: ";
-		cin >> ship.customer_rating;
-		cout << "Enter CoP: ";
-		cin >> ship.cost_of_the_product;
-		cout << "Enter Prior Purchases: ";
-		cin >> ship.prior_purchases;
-		cout << "Enter Importance: ";
-		cin >> ship.product_importance;
-		cout << "Enter Gender: ";
-		cin >> ship.gender;
-		cout << "Enter Discount: ";
-		cin >> ship.discount_offered;
-		cout << "Enter Weight: ";
-		cin >> ship.weight_in_gms;
-		cout << "Enter On Time: ";
-		cin >> ship.reached_on_time;
+		ship = newShipment(ship);
 		shiplist.insert(it, ship);
 		cout << "Inserted element at position " << pos2 << endl;
 		break;
@@ -166,9 +216,148 @@ void llfeatures(list<shipmentData> shiplist)
 	}
 }
 
-void menu(list<shipmentData> shiplist)
+void vecFeatures(list<shipmentData> &shiplist, vector<shipmentData> &vec){
+	cout << "Vector Features" << endl;
+	cout << "1. Populate Vector from the current Linked-list" << endl;
+	cout << "2. Display All Elements" << endl;
+	cout << "3. Display Element at Index position i" << endl;
+	cout << "4. Insert New Shipping Record at position 2" << endl;
+	cout << "5. Sort the Vector in order of Product Cost" << endl;
+	cout << "6. Sort the vector in order of ID" << endl;
+	cout << "7. Display shipping records where customer rating is less than 3" << endl;
+
+	int subchoice;
+	cin >> subchoice;
+	shipmentData ship;
+	list<shipmentData>::iterator it;
+
+	if(cin.fail() || subchoice < 0 || subchoice > 7){
+		cin.clear();
+		cout<<"Invalid input. Please enter a valid option."<<endl;
+	}
+	
+	switch (subchoice)
+	{
+	case 1:
+		for (it = shiplist.begin(); it != shiplist.end(); it++)
+		{
+			vec.push_back(*it);
+			cout << "Addded: " << it->id << endl;
+		}
+		break;
+	case 2:
+		showHeaders();
+		for (int i = 0; i < vec.size(); i++)
+		{
+			display(vec[i]);
+		}
+		break;
+	case 3:
+		cout << "Enter index to display: ";
+		int index;
+		cin >> index;
+		if(index > vec.size() || index < 0){
+			cout << "Invalid index" << endl;
+			break;
+		}
+		showHeaders();
+		display(vec[index]);
+		break;
+	case 4:
+		ship = newShipment(ship);
+		vec.insert(vec.begin() + 2, ship);
+		cout << "Inserted new shipping record at position 2" << endl;
+		break;
+	case 5:
+		sort(vec.begin(), vec.end(), sortCost);
+		cout << "Vector sorted by cost" << endl;
+		break;
+
+	case 6:
+		sort(vec.begin(), vec.end(), sortID);
+		cout << "Vector sorted by ID" << endl;
+		break;
+	case 7:
+		showHeaders();
+		for (int i = 0; i < vec.size(); i++)
+		{
+			if (vec[i].customer_rating < 3)
+			{
+				display(vec[i]);
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void setFeatures(list<shipmentData> &shiplist, unordered_set<string> &uos){
+	cout << "Set Features" << endl;
+	cout << "1. Check that all Shipping Records have valid Product Importance" << endl;
+
+	int subchoice;
+	cin >> subchoice;
+	
+
+	uos.insert("low");
+	uos.insert("medium");
+	uos.insert("high");
+
+	if(subchoice != 1){
+		cin.clear();
+		cout<<"Invalid input. Please enter a valid option."<<endl;
+	}
+	
+
+	switch (subchoice)
+	{
+	case 1:
+		checkForInvalidProductImportanceValues(shiplist, uos);
+		break;
+	
+	default:
+		break;
+	}
+}
+
+void mapFeatures(list<shipmentData> &shiplist, unordered_map<int, shipmentData> &uom){
+	cout << "Map Features" << endl;
+	cout << "1. Find and Display a record by ID" << endl;
+
+	int subchoice;
+	cin >> subchoice;
+	list<shipmentData>::iterator it;
+
+	for(shipmentData i: shiplist){
+		uom[i.id] = i;
+	}
+
+	if(subchoice != 1){
+		cin.clear();
+		cout<<"Invalid input. Please enter a valid option."<<endl;
+	}
+
+	switch (subchoice)
+	{
+	case 1:
+		cout << "Enter ID to find: ";
+		int id;
+		cin >> id;
+		if(uom.find(id) != uom.end()){
+			showHeaders();
+			display(uom[id]);
+		} else {
+			cout << "ID not found" << endl;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void menu(list<shipmentData> &shiplist, vector<shipmentData> &vec, unordered_set<string> &uos, unordered_map<int, shipmentData> &uom)
 {
-	cout << "Welcome to the Shipping Data Analysis Program" << endl;
 	cout << "1. Linked-List Features" << endl;
 	cout << "2. Vector Features" << endl;
 	cout << "3. Set Features" << endl;
@@ -178,28 +367,29 @@ void menu(list<shipmentData> shiplist)
 	int choice;
 	cin >> choice;
 
-	//FIXME: If choice is not an integer, the program will loop infinitely
+	if(cin.fail() || choice < 0 || choice > 9){
+		cin.clear();
+		cout<<"Invalid input. Please enter a valid option."<<endl;
+	}
 
-	//TODO: Add vecfeatures(), setfeatures(), and mapfeatures() functions
 	switch (choice)
 	{
 	case 1:
-		llfeatures(shiplist);
+		llFeatures(shiplist);
 		break;
 	case 2:
-		/* vecfeatures(); */
+		vecFeatures(shiplist, vec);
 		break;
 	case 3:
-		/* setfeatures(); */
+		setFeatures(shiplist, uos);
 		break;
 	case 4:
-		/* mapfeatures(); */
+		mapFeatures(shiplist, uom);
 		break;
 	case 5:
 		cout << "Thank you for using the program" << endl;
 		break;
 	default:
-		cout << "Invalid choice" << endl;
 		break;
 	}
 }
@@ -287,11 +477,15 @@ int main()
 {
 	bool inApp = true;
 	list<shipmentData> shiplist;
-	load("shipping-data-small.csv", shiplist);
+	vector<shipmentData> vec;
+	unordered_map <int, shipmentData> uom;
+	unordered_set <string> uos;
+	load("shipping-data-large.csv", shiplist);
 
 	while(inApp){
 
-		menu(shiplist);
+		cout << "Welcome to the Shipping Data Analysis Program" << endl;
+		menu(shiplist, vec, uos, uom);
 		cout << "Would you like to continue? (y/n)" << endl;
 		char choice;
 		cin >> choice;
@@ -299,9 +493,6 @@ int main()
 			inApp = false;
 		}
 	}
-	
-
-	/* display(*shiplist.begin()); */
 
 	return 0;
 }
